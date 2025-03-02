@@ -1,6 +1,14 @@
 import streamlit as st
 import requests
 import time
+import os
+
+# Get the PORT value from the environment, default to 10000 if not set
+PORT = os.environ.get("PORT", "10000")
+
+# Run Streamlit with the correct port
+os.system(f"streamlit run app.py --server.port={PORT} --server.address=0.0.0.0")
+
 
 # Flask backend URL
 FLASK_API_URL = "http://127.0.0.1:5000/get_response"  # Update if deploying
