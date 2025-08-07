@@ -7,7 +7,6 @@ from flask import Flask, request, jsonify
 load_dotenv()
 genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
 
-# Configure the AI Model
 generation_config = {
     "temperature": 1,
     "top_p": 0.95,
@@ -21,7 +20,6 @@ model = genai.GenerativeModel(
     generation_config=generation_config,
 )
 
-# Predefined responses
 responses = {
     "who are you": "I am the chatbot of Butt Karahi. I will help you choose the best meal according to your requirements.",
     "introduction": "Butt Karahi Canada is a renowned Pakistani restaurant known for authentic Punjabi flavors and quality.",
@@ -56,29 +54,26 @@ responses = {
     For more details, visit their website.""",
 }
 
-# Function to generate chatbot response
 def GenerateResponse(input_text):
     input_text = input_text.lower()
 
-    # Check predefined responses
     for key in responses:
         if key in input_text:
             return responses[key]  
 
-    # Generate AI-based response
     prompt = f"""You are a chatbot for Butt Karahi, a Pakistani restaurant. Answer user queries based on the restaurant's information.
     User: {input_text}
     Chatbot:"""
 
     response = model.generate_content(prompt)
     
-    # Handle irrelevant AI responses
+    
     if "I don't know" in response.text.lower():
         return "Working on model training"
     
     return response.text
 
-# Flask App
+
 app = Flask(__name__)
 
 @app.route("/")
@@ -89,7 +84,7 @@ def home():
 def get_response():
     data = request.json
     prompt = data.get("prompt", "")
-    response = GenerateResponse(prompt)  # Call AI function
+    response = GenerateResponse(prompt)  
     return jsonify({"response": response})
 
 if __name__ == "__main__":
